@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  *
- * @property Courses $courses
+ * @property Courses[] $courses
  */
 class Categories extends \yii\db\ActiveRecord
 {
@@ -50,6 +50,6 @@ class Categories extends \yii\db\ActiveRecord
      */
     public function getCourses()
     {
-        return $this->hasOne(Courses::className(), ['id' => 'id']);
+        return $this->hasMany(Courses::className(), ['category_id' => 'id']);
     }
 }

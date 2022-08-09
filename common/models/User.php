@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property int $region_id
  *
  * @property District $district
+ * @property Groups[] $groups
  * @property Region $region
  * @property Role $role
  * @property RtomManager[] $rtomManagers
@@ -38,8 +39,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role_id', 'district_id', 'region_id','username'], 'required'],
-            ['password','required','on'=>'insert'],
+            [['role_id', 'district_id', 'region_id'], 'required'],
             [['role_id', 'district_id', 'region_id'], 'integer'],
             [['username'], 'string', 'max' => 50],
             [['password'], 'string', 'max' => 500],
@@ -58,13 +58,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Login',
-            'password' => 'Parol',
-            'name' => 'FIO',
-            'role_id' => 'Rol',
-            'district_id' => 'Tuman',
-            'phone' => 'Telefon',
-            'region_id' => 'Viloyat',
+            'username' => 'Username',
+            'password' => 'Password',
+            'name' => 'Name',
+            'role_id' => 'Role ID',
+            'district_id' => 'District ID',
+            'phone' => 'Phone',
+            'region_id' => 'Region ID',
         ];
     }
 
@@ -76,6 +76,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getDistrict()
     {
         return $this->hasOne(District::className(), ['id' => 'district_id']);
+    }
+
+    /**
+     * Gets query for [[Groups]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroups()
+    {
+        return $this->hasMany(Groups::className(), ['teacher_id' => 'id']);
     }
 
     /**
@@ -108,7 +118,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(RtomManager::className(), ['user_id' => 'id']);
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -122,7 +131,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return null;
+        return static::findOne(['token' => $token]);
     }
 
     /**
@@ -144,7 +153,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findByPasswordResetToken($token)
     {
-        return null;
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
+        }
+
+        return static::findOne([
+            'password_reset_token' => $token,
+        ]);
     }
 
     /**
@@ -154,7 +169,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @return static|null
      */
     public static function findByVerificationToken($token) {
-        return null;
+        return static::findOne([
+            'verification_token' => $token,
+        ]);
     }
 
     /**
@@ -219,4 +236,35 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Generates new password reset token
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Generates new token for email verification
+     */
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+    }
 }

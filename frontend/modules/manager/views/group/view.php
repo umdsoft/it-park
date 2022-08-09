@@ -36,7 +36,40 @@ $this->params['breadcrumbs'][] = $this->title;
             'begin_date',
             'end_date',
             'group_status',
+            'teacher_id'
         ],
     ]) ?>
 
 </div>
+
+
+<a href="<?= Yii::$app->urlManager->createUrl(['/manager/group/create-person','id'=>$model->id])?>" class="btn btn-primary">O'quvchi qo'shish</a>
+
+<?= \yii\grid\GridView::widget([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'tableOptions' => ['class' => 'table table-responsive-md'],
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+
+        'full_name',
+        'phone',
+        'birthday',
+        'gender',
+        [
+            'class' => \yii\grid\ActionColumn::className(),
+            'urlCreator' => function ($action, $model, $key, $index, $column) {
+                return \yii\helpers\Url::toRoute([$action.'-person', 'id' => $model->id]);
+            }
+        ],
+    ],
+]); ?>
+
+<?php \yii\widgets\ListView::widget([
+    'dataProvider' => $dataProvider,
+    'itemOptions' => ['class' => 'item'],
+    'itemView' => function ($model, $key, $index, $widget) {
+        return $this->render('person/_list',['model'=>$model]);
+    },
+]) ?>
+

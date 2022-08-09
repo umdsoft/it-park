@@ -10,8 +10,12 @@ use Yii;
  * @property int $id
  * @property int|null $rtom_id
  * @property string|null $full_name
+ * @property string|null $phone
+ * @property string|null $birthday
+ * @property int|null $gender
+ * @property string|null $uid
  *
- * @property GropsPersons[] $gropsPersons
+ * @property GroupPerson[] $groupPeople
  * @property Rtom $rtom
  */
 class Person extends \yii\db\ActiveRecord
@@ -30,8 +34,11 @@ class Person extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rtom_id'], 'integer'],
-            [['full_name'], 'string', 'max' => 255],
+            [['gender','phone','full_name','birthday'],'required'],
+            [['rtom_id', 'gender'], 'integer'],
+            ['uid','unique'],
+            [['birthday'], 'safe'],
+            [['full_name', 'phone', 'uid'], 'string', 'max' => 255],
             [['rtom_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rtom::className(), 'targetAttribute' => ['rtom_id' => 'id']],
         ];
     }
@@ -45,17 +52,21 @@ class Person extends \yii\db\ActiveRecord
             'id' => 'ID',
             'rtom_id' => 'Rtom ID',
             'full_name' => 'Full Name',
+            'phone' => 'Phone',
+            'birthday' => 'Birthday',
+            'gender' => 'Gender',
+            'uid' => 'Uid',
         ];
     }
 
     /**
-     * Gets query for [[GropsPersons]].
+     * Gets query for [[GroupPeople]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getGropsPersons()
+    public function getGroupPeople()
     {
-        return $this->hasMany(GropsPersons::className(), ['person_id' => 'id']);
+        return $this->hasMany(GroupPerson::className(), ['person_id' => 'id']);
     }
 
     /**

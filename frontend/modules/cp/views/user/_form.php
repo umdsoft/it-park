@@ -42,7 +42,7 @@ $this->registerJs("
         $.get('{$url}?id='+ $('#user-region_id').val()).done(function(data){
             $('#user-district_id').empty();
             $('#user-district_id').append(data);
-            $('#user-district_id').selectpicker('refresh');;
+            $('#user-district_id').selectpicker('refresh');
             
         })
     })

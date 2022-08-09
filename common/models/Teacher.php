@@ -11,7 +11,6 @@ use Yii;
  * @property string|null $name
  * @property int|null $rtom_id
  *
- * @property Groups[] $groups
  * @property Rtom $rtom
  */
 class Teacher extends \yii\db\ActiveRecord
@@ -46,16 +45,6 @@ class Teacher extends \yii\db\ActiveRecord
             'name' => 'Name',
             'rtom_id' => 'Rtom ID',
         ];
-    }
-
-    /**
-     * Gets query for [[Groups]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGroups()
-    {
-        return $this->hasMany(Groups::className(), ['teacher_id' => 'id']);
     }
 
     /**

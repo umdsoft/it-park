@@ -17,10 +17,10 @@ use Yii;
  * @property int|null $teacher_id
  *
  * @property Courses $course
- * @property GropsPersons[] $gropsPersons
+ * @property GroupPerson[] $groupPeople
  * @property GroupStatus $groupStatus
  * @property Rtom $rtom
- * @property Teacher $teacher
+ * @property User $teacher
  */
 class Groups extends \yii\db\ActiveRecord
 {
@@ -45,7 +45,7 @@ class Groups extends \yii\db\ActiveRecord
             [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['course_id' => 'id']],
             [['group_status'], 'exist', 'skipOnError' => true, 'targetClass' => GroupStatus::className(), 'targetAttribute' => ['group_status' => 'id']],
             [['rtom_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rtom::className(), 'targetAttribute' => ['rtom_id' => 'id']],
-            [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => Teacher::className(), 'targetAttribute' => ['teacher_id' => 'id']],
+            [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['teacher_id' => 'id']],
         ];
     }
 
@@ -56,13 +56,13 @@ class Groups extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Nomi',
+            'name' => 'Name',
             'rtom_id' => 'Rtom ID',
-            'course_id' => 'Kurs nomi',
-            'begin_date' => 'Boshlanish sanasi',
-            'end_date' => 'Tugash sanasi',
-            'group_status' => 'Holat',
-            'teacher_id' => 'O\'qituvchi',
+            'course_id' => 'Course ID',
+            'begin_date' => 'Begin Date',
+            'end_date' => 'End Date',
+            'group_status' => 'Group Status',
+            'teacher_id' => 'Teacher ID',
         ];
     }
 
@@ -77,13 +77,13 @@ class Groups extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[GropsPersons]].
+     * Gets query for [[GroupPeople]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getGropsPersons()
+    public function getGroupPeople()
     {
-        return $this->hasMany(GropsPersons::className(), ['group_id' => 'id']);
+        return $this->hasMany(GroupPerson::className(), ['group_id' => 'id']);
     }
 
     /**
@@ -113,6 +113,6 @@ class Groups extends \yii\db\ActiveRecord
      */
     public function getTeacher()
     {
-        return $this->hasOne(Teacher::className(), ['id' => 'teacher_id']);
+        return $this->hasOne(User::className(), ['id' => 'teacher_id']);
     }
 }

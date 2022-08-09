@@ -18,6 +18,7 @@ use Yii;
  * @property Person[] $people
  * @property Region $region
  * @property RtomManager[] $rtomManagers
+ * @property Teacher[] $teachers
  */
 class Rtom extends \yii\db\ActiveRecord
 {
@@ -50,9 +51,9 @@ class Rtom extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Nomi',
-            'region_id' => 'Viloyat',
-            'district_id' => 'Tuman',
+            'name' => 'Name',
+            'region_id' => 'Region ID',
+            'district_id' => 'District ID',
         ];
     }
 
@@ -114,5 +115,15 @@ class Rtom extends \yii\db\ActiveRecord
     public function getRtomManagers()
     {
         return $this->hasMany(RtomManager::className(), ['rtom_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Teachers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeachers()
+    {
+        return $this->hasMany(Teacher::className(), ['rtom_id' => 'id']);
     }
 }

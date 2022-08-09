@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'course_id')->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\Course::find()->all(),'id','name')) ?>
 
-    <?= $form->field($model, 'teacher_id')->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\Teacher::find()->where(['rtom_id'=>\common\models\Rtom::findOne(['district_id'=>Yii::$app->user->identity->district_id])->id])->all(),'id','name')) ?>
+    <?= $form->field($model, 'teacher_id')->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\User::find()->where(['role_id'=>'5'])->all(),'id','name')) ?>
 
     <?= $form->field($model, 'begin_date')->textInput(['type'=>'date']) ?>
 
