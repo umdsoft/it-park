@@ -18,6 +18,9 @@ return [
         'manager' => [
             'class' => 'frontend\modules\manager\Module',
         ],
+        'teacher' => [
+            'class' => 'frontend\modules\teacher\Module',
+        ],
     ],
     'language'=>'uz',
     'components' => [
